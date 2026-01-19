@@ -6,9 +6,20 @@ function App() {
   const [height, setHeight] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("male");
+  const [advancedMode, setAdvancedMode] = useState(false);
+  
+  // Advanced measurements
+  const [neck, setNeck] = useState("");
+  const [waist, setWaist] = useState("");
+  const [hip, setHip] = useState("");
+  
+  // Results
   const [bmi, setBmi] = useState(null);
   const [category, setCategory] = useState("");
   const [advice, setAdvice] = useState("");
+  const [bodyFat, setBodyFat] = useState(null);
+  const [whr, setWhr] = useState(null);
+  const [whtr, setWhtr] = useState(null);
 
   const calculateBMI = () => {
     if (weight && height) {
@@ -35,6 +46,38 @@ function App() {
 
       setCategory(cat);
       setAdvice(adv);
+
+      // Advanced calculations
+      if (advancedMode && neck && waist && hip) {
+        calculateAdvancedMetrics();
+      }
+    }
+  };
+
+  const calculateAdvancedMetrics = () => {
+    // Body Fat Percentage (US Navy Method)
+    if (neck && waist && hip && height) {
+      let bodyFatPercent;
+      
+      if (gender === "male") {
+        bodyFatPercent = 495 / (1.0324 - 0.19077 * Math.log10(parseFloat(waist) - parseFloat(neck)) + 0.15456 * Math.log10(parseFloat(height))) - 450;
+      } else {
+        bodyFatPercent = 495 / (1.29579 - 0.35004 * Math.log10(parseFloat(waist) + parseFloat(hip) - parseFloat(neck)) + 0.22100 * Math.log10(parseFloat(height))) - 450;
+      }
+      
+      setBodyFat(bodyFatPercent.toFixed(1));
+    }
+
+    // Waist-to-Hip Ratio
+    if (waist && hip) {
+      const whrValue = (parseFloat(waist) / parseFloat(hip)).toFixed(2);
+      setWhr(whrValue);
+    }
+
+    // Waist-to-Height Ratio
+    if (waist && height) {
+      const whtrValue = (parseFloat(waist) / parseFloat(height)).toFixed(2);
+      setWhtr(whtrValue);
     }
   };
 
@@ -43,9 +86,15 @@ function App() {
     setHeight("");
     setAge("");
     setGender("male");
+    setNeck("");
+    setWaist("");
+    setHip("");
     setBmi(null);
     setCategory("");
     setAdvice("");
+    setBodyFat(null);
+    setWhr(null);
+    setWhtr(null);
   };
 
   // Calculate BMI indicator position on the chart (0-100%)
@@ -58,13 +107,62 @@ function App() {
     return Math.min(75 + ((bmiNum - 30) / 10) * 25, 100);
   };
 
+  // Get body fat category
+  const getBodyFatCategory = () => {
+    if (!bodyFat) return "";
+    const bf = parseFloat(bodyFat);
+    
+    if (gender === "male") {
+      if (bf < 6) return "Essential Fat";
+      if (bf < 14) return "Athletes";
+      if (bf < 18) return "Fitness";
+      if (bf < 25) return "Average";
+      return "Obese";
+    } else {
+      if (bf < 14) return "Essential Fat";
+      if (bf < 21) return "Athletes";
+      if (bf < 25) return "Fitness";
+      if (bf < 32) return "Average";
+      return "Obese";
+    }
+  };
+
+  // Get WHR risk level
+  const getWHRRisk = () => {
+    if (!whr) return "";
+    const whrValue = parseFloat(whr);
+    
+    if (gender === "male") {
+      if (whrValue < 0.95) return "Low Risk 💚";
+      if (whrValue < 1.0) return "Moderate Risk 🟡";
+      return "High Risk 🔴";
+    } else {
+      if (whrValue < 0.80) return "Low Risk 💚";
+      if (whrValue < 0.85) return "Moderate Risk 🟡";
+      return "High Risk 🔴";
+    }
+  };
+
   return (
     <div className="app-container">
       <div className="bmi-card">
         
-        <h1 className="title">💪 BMI Calculator</h1>
+        <h1 className="title">⚖️ Health Calculator</h1>
         <p className="subtitle">by The_Bozgun</p>
         
+        {/* Advanced Mode Toggle */}
+        <div className="advanced-toggle">
+          <label className="toggle-label">
+            <input 
+              type="checkbox" 
+              checked={advancedMode} 
+              onChange={(e) => setAdvancedMode(e.target.checked)}
+              className="toggle-checkbox"
+            />
+            <span className="toggle-text">Advanced Analysis</span>
+          </label>
+        </div>
+
         {/* Gender selection */}
         <div className="form-group">
           <label className="label">Gender:</label>
@@ -126,6 +224,46 @@ function App() {
           />
         </div>
 
+        {/* Advanced measurements */}
+        {advancedMode && (
+          <div className="advanced-section">
+            <h3 className="section-title">📏 Body Measurements</h3>
+            
+            <div className="form-group">
+              <label className="label">Neck Circumference (cm):</label>
+              <input
+                type="number"
+                value={neck}
+                onChange={(e) => setNeck(e.target.value)}
+                placeholder="Measure around neck"
+                className="input-field"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="label">Waist Circumference (cm):</label>
+              <input
+                type="number"
+                value={waist}
+                onChange={(e) => setWaist(e.target.value)}
+                placeholder="Measure around waist"
+                className="input-field"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="label">Hip Circumference (cm):</label>
+              <input
+                type="number"
+                value={hip}
+                onChange={(e) => setHip(e.target.value)}
+                placeholder="Measure around hips"
+                className="input-field"
+              />
+            </div>
+          </div>
+        )}
+
         {/* Action buttons */}
         <div className="button-group">
           <button onClick={calculateBMI} className="btn btn-primary">
@@ -186,6 +324,42 @@ function App() {
             
             {/* Health advice based on BMI category */}
             <p className="advice">{advice}</p>
+
+            {/* Advanced Results */}
+            {advancedMode && bodyFat && (
+              <div className="advanced-results">
+                <h3 className="section-title">📊 Advanced Metrics</h3>
+                
+                <div className="metrics-grid">
+                  {/* Body Fat */}
+                  <div className="metric-card">
+                    <div className="metric-label">Body Fat Percentage</div>
+                    <div className="metric-value">{bodyFat}%</div>
+                    <div className="metric-category">{getBodyFatCategory()}</div>
+                  </div>
+
+                  {/* WHR */}
+                  {whr && (
+                    <div className="metric-card">
+                      <div className="metric-label">Waist-to-Hip Ratio</div>
+                      <div className="metric-value">{whr}</div>
+                      <div className="metric-category">{getWHRRisk()}</div>
+                    </div>
+                  )}
+
+                  {/* WHtR */}
+                  {whtr && (
+                    <div className="metric-card">
+                      <div className="metric-label">Waist-to-Height Ratio</div>
+                      <div className="metric-value">{whtr}</div>
+                      <div className="metric-category">
+                        {whtr < 0.5 ? "Healthy 💚" : whtr < 0.6 ? "Increased Risk 🟡" : "High Risk 🔴"}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
