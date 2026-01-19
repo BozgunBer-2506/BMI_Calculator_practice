@@ -55,7 +55,7 @@ function App() {
   };
 
   const calculateAdvancedMetrics = () => {
-    // Body Fat Percentage (US Navy Method - CORRECTED)
+    // Body Fat Percentage (US Navy Method - CORRECTED FORMULA)
     if (neck && waist && height) {
       let bodyFatPercent = null;
       
@@ -63,18 +63,23 @@ function App() {
       const waistValue = parseFloat(waist);
       const heightValue = parseFloat(height);
       
-      if (gender === "male") {
-        // Male formula (only needs neck, waist, height)
-        bodyFatPercent = 86.010 * Math.log10(waistValue - neckValue) - 70.041 * Math.log10(heightValue) + 36.76;
-        setBodyFat(bodyFatPercent.toFixed(1));
+      // Ensure measurements are valid
+      if (waistValue <= neckValue) {
+        setBodyFat(null);
       } else {
-        // Female formula (needs hip measurement too)
-        if (hip) {
-          const hipValue = parseFloat(hip);
-          bodyFatPercent = 163.205 * Math.log10(waistValue + hipValue - neckValue) - 97.684 * Math.log10(heightValue) - 78.387;
+        if (gender === "male") {
+          // Male formula (only needs neck, waist, height)
+          bodyFatPercent = 495 / (1.0324 - 0.19077 * Math.log10(waistValue - neckValue) + 0.15456 * Math.log10(heightValue)) - 450;
           setBodyFat(bodyFatPercent.toFixed(1));
         } else {
-          setBodyFat(null);
+          // Female formula (needs hip measurement too)
+          if (hip) {
+            const hipValue = parseFloat(hip);
+            bodyFatPercent = 495 / (1.29579 - 0.35004 * Math.log10(waistValue + hipValue - neckValue) + 0.22100 * Math.log10(heightValue)) - 450;
+            setBodyFat(bodyFatPercent.toFixed(1));
+          } else {
+            setBodyFat(null);
+          }
         }
       }
     } else {
