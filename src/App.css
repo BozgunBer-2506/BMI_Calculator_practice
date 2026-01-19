@@ -42,6 +42,35 @@
   margin: 0 0 40px 0;
 }
 
+/* Advanced toggle */
+.advanced-toggle {
+  margin-bottom: 30px;
+  text-align: center;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.toggle-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.toggle-text {
+  font-weight: 600;
+}
+
 /* Form group container for inputs */
 .form-group {
   margin-bottom: 25px;
@@ -96,6 +125,31 @@
 .input-field:focus {
   outline: none;
   border-color: #667eea;
+}
+
+/* Input hint text */
+.input-hint {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Advanced section */
+.advanced-section {
+  background-color: #f0f4ff;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  border-left: 4px solid #667eea;
+}
+
+.section-title {
+  font-size: 1.3rem;
+  color: #333;
+  margin: 0 0 20px 0;
+  font-weight: 600;
 }
 
 /* Button container - Flex layout for side by side buttons */
@@ -258,6 +312,63 @@
   font-size: 1.1rem;
 }
 
+/* Advanced results */
+.advanced-results {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 2px solid #e0e0e0;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.metric-card {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.metric-category {
+  font-size: 0.95rem;
+  color: #555;
+  font-weight: 600;
+}
+
+.info-box {
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #856404;
+  line-height: 1.6;
+}
+
+.info-box strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
 /* Responsive Design - Tablet screens (768px and below) */
 @media (max-width: 768px) {
   .bmi-card {
@@ -294,6 +405,14 @@
   .btn {
     font-size: 1rem;
   }
+
+  .advanced-section {
+    padding: 20px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Responsive Design - Mobile screens (480px and below) */
@@ -312,6 +431,14 @@
     margin-bottom: 25px;
   }
 
+  .advanced-toggle {
+    padding: 12px;
+  }
+
+  .toggle-text {
+    font-size: 1rem;
+  }
+
   .label {
     font-size: 0.95rem;
   }
@@ -327,6 +454,14 @@
   .input-field {
     padding: 12px 10px;
     font-size: 0.95rem;
+  }
+
+  .advanced-section {
+    padding: 15px;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
   }
 
   .btn {
@@ -363,6 +498,19 @@
 
   .advice {
     font-size: 0.9rem;
+    padding: 12px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-value {
+    font-size: 1.6rem;
+  }
+
+  .info-box {
+    font-size: 0.85rem;
     padding: 12px;
   }
 }

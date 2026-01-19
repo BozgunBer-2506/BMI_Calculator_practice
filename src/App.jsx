@@ -48,36 +48,53 @@ function App() {
       setAdvice(adv);
 
       // Advanced calculations
-      if (advancedMode && neck && waist && hip) {
+      if (advancedMode) {
         calculateAdvancedMetrics();
       }
     }
   };
 
   const calculateAdvancedMetrics = () => {
-    // Body Fat Percentage (US Navy Method)
-    if (neck && waist && hip && height) {
-      let bodyFatPercent;
+    // Body Fat Percentage (US Navy Method - CORRECTED)
+    if (neck && waist && height) {
+      let bodyFatPercent = null;
+      
+      const neckValue = parseFloat(neck);
+      const waistValue = parseFloat(waist);
+      const heightValue = parseFloat(height);
       
       if (gender === "male") {
-        bodyFatPercent = 495 / (1.0324 - 0.19077 * Math.log10(parseFloat(waist) - parseFloat(neck)) + 0.15456 * Math.log10(parseFloat(height))) - 450;
+        // Male formula (only needs neck, waist, height)
+        bodyFatPercent = 86.010 * Math.log10(waistValue - neckValue) - 70.041 * Math.log10(heightValue) + 36.76;
+        setBodyFat(bodyFatPercent.toFixed(1));
       } else {
-        bodyFatPercent = 495 / (1.29579 - 0.35004 * Math.log10(parseFloat(waist) + parseFloat(hip) - parseFloat(neck)) + 0.22100 * Math.log10(parseFloat(height))) - 450;
+        // Female formula (needs hip measurement too)
+        if (hip) {
+          const hipValue = parseFloat(hip);
+          bodyFatPercent = 163.205 * Math.log10(waistValue + hipValue - neckValue) - 97.684 * Math.log10(heightValue) - 78.387;
+          setBodyFat(bodyFatPercent.toFixed(1));
+        } else {
+          setBodyFat(null);
+        }
       }
-      
-      setBodyFat(bodyFatPercent.toFixed(1));
+    } else {
+      setBodyFat(null);
     }
 
-    // Waist-to-Hip Ratio
+    // Waist-to-Hip Ratio (needs both waist and hip)
     if (waist && hip) {
       const whrValue = (parseFloat(waist) / parseFloat(hip)).toFixed(2);
       setWhr(whrValue);
+    } else {
+      setWhr(null);
     }
 
     // Waist-to-Height Ratio
     if (waist && height) {
       const whtrValue = (parseFloat(waist) / parseFloat(height)).toFixed(2);
       setWhtr(whtrValue);
+    } else {
+      setWhtr(null);
     }
   };
 
@@ -147,7 +164,7 @@ function App() {
     <div className="app-container">
       <div className="bmi-card">
         
-        <h1 className="title">⚖️ Health Calculator</h1>
+        <h1 className="title">💪 BMI+ Calculator</h1>
         <p className="subtitle">by The_Bozgun</p>
         
         {/* Advanced Mode Toggle */}
@@ -233,6 +250,7 @@ function App() {
               <label className="label">Neck Circumference (cm):</label>
               <input
                 type="number"
+                step="0.1"
                 value={neck}
                 onChange={(e) => setNeck(e.target.value)}
                 placeholder="Measure around neck"
@@ -244,9 +262,10 @@ function App() {
               <label className="label">Waist Circumference (cm):</label>
               <input
                 type="number"
+                step="0.1"
                 value={waist}
                 onChange={(e) => setWaist(e.target.value)}
-                placeholder="Measure around waist"
+                placeholder="Measure at belly button level"
                 className="input-field"
               />
             </div>
@@ -255,11 +274,15 @@ function App() {
               <label className="label">Hip Circumference (cm):</label>
               <input
                 type="number"
+                step="0.1"
                 value={hip}
                 onChange={(e) => setHip(e.target.value)}
-                placeholder="Measure around hips"
+                placeholder="Measure at widest point"
                 className="input-field"
               />
+              <small className="input-hint">
+                {gender === "female" ? "Required for body fat calculation" : "Required for WHR calculation"}
+              </small>
             </div>
           </div>
         )}
@@ -326,17 +349,19 @@ function App() {
             <p className="advice">{advice}</p>
 
             {/* Advanced Results */}
-            {advancedMode && bodyFat && (
+            {advancedMode && (bodyFat || whr || whtr) && (
               <div className="advanced-results">
                 <h3 className="section-title">📊 Advanced Metrics</h3>
                 
                 <div className="metrics-grid">
                   {/* Body Fat */}
-                  <div className="metric-card">
-                    <div className="metric-label">Body Fat Percentage</div>
-                    <div className="metric-value">{bodyFat}%</div>
-                    <div className="metric-category">{getBodyFatCategory()}</div>
-                  </div>
+                  {bodyFat && (
+                    <div className="metric-card">
+                      <div className="metric-label">Body Fat Percentage</div>
+                      <div className="metric-value">{bodyFat}%</div>
+                      <div className="metric-category">{getBodyFatCategory()}</div>
+                    </div>
+                  )}
 
                   {/* WHR */}
                   {whr && (
@@ -357,6 +382,13 @@ function App() {
                       </div>
                     </div>
                   )}
+                </div>
+
+                {/* Info box */}
+                <div className="info-box">
+                  <strong>ℹ️ Note:</strong> Body fat calculations use the US Navy method. 
+                  {gender === "female" && !hip && " Hip measurement required for accurate body fat calculation."}
+                  {!hip && " Hip measurement required for Waist-to-Hip Ratio."}
                 </div>
               </div>
             )}
