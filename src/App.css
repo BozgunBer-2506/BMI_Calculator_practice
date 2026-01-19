@@ -1,0 +1,391 @@
+/* Global styles - Reset default browser styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Main container - Full screen with gradient background */
+.app-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+}
+
+/* BMI Calculator Card - White container with shadow */
+.bmi-card {
+  width: 95%;
+  max-width: 1200px;
+  padding: 60px 120px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* Main title styling */
+.title {
+  text-align: center;
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 3rem;
+}
+
+/* Subtitle with author name */
+.subtitle {
+  text-align: center;
+  color: #888;
+  font-size: 1.1rem;
+  margin: 0 0 40px 0;
+}
+
+/* Form group container for inputs */
+.form-group {
+  margin-bottom: 25px;
+}
+
+/* Label styling for input fields */
+.label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+/* Gender radio button container */
+.gender-options {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+}
+
+/* Radio button label styling */
+.radio-label {
+  cursor: pointer;
+  color: #333;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Radio button input styling */
+.radio-label input[type="radio"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+/* Text input field styling */
+.input-field {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  color: black;
+  transition: border-color 0.3s;
+}
+
+/* Input field focus state */
+.input-field:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+/* Button container - Flex layout for side by side buttons */
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+/* Base button styling */
+.btn {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+
+/* Primary button - Purple background */
+.btn-primary {
+  background-color: #667eea;
+  color: white;
+}
+
+/* Primary button hover effect */
+.btn-primary:hover {
+  background-color: #5568d3;
+  transform: translateY(-2px);
+}
+
+/* Secondary button - White with border */
+.btn-secondary {
+  background-color: white;
+  color: #333;
+  border: 2px solid #ddd;
+}
+
+/* Secondary button hover effect */
+.btn-secondary:hover {
+  border-color: #999;
+  transform: translateY(-2px);
+}
+
+/* Results section container */
+.results {
+  margin-top: 35px;
+}
+
+/* BMI value display - Large number */
+.bmi-value {
+  font-size: 3.5rem;
+  margin: 0 0 15px 0;
+  text-align: center;
+}
+
+/* BMI category text */
+.bmi-category {
+  font-size: 1.8rem;
+  margin: 0 0 30px 0;
+  color: #333;
+  text-align: center;
+}
+
+/* BMI visual chart container */
+.bmi-chart {
+  position: relative;
+  height: 90px;
+  background-color: #f0f0f0;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* Chart bars flex container */
+.chart-bars {
+  display: flex;
+  height: 100%;
+}
+
+/* Individual bar styling */
+.bar {
+  flex: 1;
+}
+
+/* Underweight category - Blue */
+.bar-blue {
+  background-color: #3498db;
+}
+
+/* Normal weight category - Green */
+.bar-green {
+  background-color: #2ecc71;
+}
+
+/* Overweight category - Orange */
+.bar-orange {
+  background-color: #f39c12;
+}
+
+/* Obese category - Red */
+.bar-red {
+  background-color: #e74c3c;
+}
+
+/* Black indicator line showing user BMI position */
+.indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background-color: black;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+  transform: translateX(-50%);
+}
+
+/* Label showing BMI value above indicator */
+.indicator-label {
+  position: absolute;
+  top: -35px;
+  transform: translateX(-50%);
+  background-color: black;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* Category labels below chart */
+.chart-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 25px;
+  font-weight: 500;
+}
+
+/* BMI range values below labels */
+.chart-ranges {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 30px;
+}
+
+/* Health advice text box */
+.advice {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  color: #333;
+  line-height: 1.7;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+/* Responsive Design - Tablet screens (768px and below) */
+@media (max-width: 768px) {
+  .bmi-card {
+    padding: 35px 30px;
+    max-width: 600px;
+    width: 90%;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .label {
+    font-size: 1rem;
+  }
+
+  .input-field {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .bmi-value {
+    font-size: 2.8rem;
+  }
+
+  .bmi-category {
+    font-size: 1.5rem;
+  }
+
+  .btn {
+    font-size: 1rem;
+  }
+}
+
+/* Responsive Design - Mobile screens (480px and below) */
+@media (max-width: 480px) {
+  .bmi-card {
+    padding: 20px 15px;
+    width: 95%;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 25px;
+  }
+
+  .label {
+    font-size: 0.95rem;
+  }
+
+  .gender-options {
+    gap: 20px;
+  }
+
+  .radio-label {
+    font-size: 0.95rem;
+  }
+
+  .input-field {
+    padding: 12px 10px;
+    font-size: 0.95rem;
+  }
+
+  .btn {
+    padding: 12px 10px;
+    font-size: 0.95rem;
+  }
+
+  .bmi-value {
+    font-size: 2rem;
+  }
+
+  .bmi-category {
+    font-size: 1.2rem;
+  }
+
+  .bmi-chart {
+    height: 60px;
+  }
+
+  .indicator-label {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    top: -30px;
+  }
+
+  .chart-labels {
+    font-size: 0.7rem;
+    gap: 5px;
+  }
+
+  .chart-ranges {
+    font-size: 0.7rem;
+  }
+
+  .advice {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+}
+
+/* Extra small screens (375px and below - iPhone SE, etc.) */
+@media (max-width: 375px) {
+  .bmi-card {
+    padding: 15px 10px;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+  }
+
+  .chart-labels span {
+    font-size: 0.65rem;
+  }
+
+  .chart-ranges span {
+    font-size: 0.65rem;
+  }
+}
